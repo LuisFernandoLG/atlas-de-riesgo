@@ -1,95 +1,94 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import Map from "@/src/components/Map";
+import { initMapPosition } from "@/src/constants/map";
+import { themes } from "@/src/constants/theme";
+import { useEffect, useState } from "react";
+import { ThemeProvider, createGlobalStyle, styled } from "styled-components";
+import { Pacifico } from "next/font/google";
+import { InfoMapRadio } from "@/src/components/InfoMapRadio";
+import { useInfoMapRadio } from "@/src/hooks/useInfoMapRadio";
+import { Loader } from "@/src/components/Loader";
+
+const pacificoFont = Pacifico({ subsets: ["latin"], weight:"400"});
+
 
 export default function Home() {
+  const [userLocation, setUserLocation] = useState(initMapPosition);
+  const {enable, toggleState} = useInfoMapRadio(false)
+
+
+  const setPosition = () => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      console.log("Latitude is :", position.coords.latitude);
+      console.log("Longitude is :", position.coords.longitude);
+      const { latitude, longitude } = position.coords;
+      setUserLocation([latitude, longitude]);
+    });
+  };
+
+  useEffect(() => {
+    setPosition();
+  }, []);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+    <ThemeProvider theme={themes.light}>
+      <GlobalStyles />
+      <Header>
+        <LetterLogo className={pacificoFont.className}>Atlas</LetterLogo>
+        <Leyend> de riesgo</Leyend>
+      </Header>
+      <GridContainer>
+      <div>
+      <h1>Información</h1>
+      <InfoMapRadio label="Colonias" enable={enable} toggleState={toggleState}/>
+      <Loader/>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+      <Map userLocation={userLocation} coloniesEnable={enable}/>
+      </GridContainer>
+    </ThemeProvider>
+  );
 }
+
+
+
+const GridContainer = styled.div`
+display: grid;
+grid-template-columns: 550px 1fr;
+background: ${({theme:{colors}})=>colors.background};
+gap: 1rem;
+padding: 1rem;
+
+`
+
+const Header = styled.header`
+  width: 100%;
+  background: ${({theme:{colors}})=>colors.primary};
+
+  margin: 0 0;
+  padding: 1rem;
+
+  display: flex;
+  align-items: flex-end;
+`;
+
+const LetterLogo = styled.h3`
+  font-size: 2rem;
+  color: ${({theme:{colors}})=>colors.letterLogo};
+  line-height: 2rem;
+  `;
+const Leyend = styled.p`
+  font-size: 1rem;
+  color: ${({theme:{colors}})=>colors.white};
+  background: ${({theme:{colors}})=>colors.secondary};
+  padding: 0.2rem;
+  margin-left: 0.2rem;
+  border-radius: 5px;
+
+`;
+
+const GlobalStyles = createGlobalStyle`
+*,*::after,*::before{
+  margin: 0 0;
+  padding: 0 0;
+}
+`;

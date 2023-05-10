@@ -1,0 +1,1 @@
+export const initMapPosition = [22.9300517, -109.93754]
