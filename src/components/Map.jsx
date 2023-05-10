@@ -14,14 +14,14 @@ import { useEffect } from "react";
 import { initMapPosition } from "../constants/map";
 import { styled } from "styled-components";
 import { colonies } from "../data/colonies";
-import { Loader } from "./Loader";
+import { MapFallback } from "./MapFallback";
 
 const Map = ({ userLocation, coloniesEnable }) => {
   return (
     <MapContainerSyled
       center={initMapPosition}
       zoom={5}
-      placeholder={<Loader/>}
+      placeholder={<MapFallback/>}
     >
       <TileLayer
         url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
@@ -59,7 +59,7 @@ const MapEvents = ({ userLocation }) => {
 
 const MapContainerSyled = styled(MapContainer)`
 width: 100%;
-height: 85vh;
+height: 100%;
 border-radius: 20px;
 overflow: hidden;
 `
