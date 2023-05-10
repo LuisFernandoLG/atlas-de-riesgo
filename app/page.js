@@ -1,5 +1,5 @@
-"use client";
-import Map from "@/src/components/Map";
+"use client"
+
 import { initMapPosition } from "@/src/constants/map";
 import { themes } from "@/src/constants/theme";
 import { useEffect, useState } from "react";
@@ -8,6 +8,8 @@ import { Pacifico } from "next/font/google";
 import { InfoMapRadio } from "@/src/components/InfoMapRadio";
 import { useInfoMapRadio } from "@/src/hooks/useInfoMapRadio";
 import { Loader } from "@/src/components/Loader";
+import dynamic from "next/dynamic";
+export const Map = dynamic(() => import('@/src/components/Map'), { ssr: false })
 
 const pacificoFont = Pacifico({ subsets: ["latin"], weight:"400"});
 
@@ -41,7 +43,6 @@ export default function Home() {
       <div>
       <h1>Información</h1>
       <InfoMapRadio label="Colonias" enable={enable} toggleState={toggleState}/>
-      <Loader/>
       </div>
       <Map userLocation={userLocation} coloniesEnable={enable}/>
       </GridContainer>
