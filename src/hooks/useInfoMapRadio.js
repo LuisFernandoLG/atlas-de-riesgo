@@ -1,14 +1,18 @@
-import React, { useState } from 'react'
+import { useState } from "react";
 
-const initialValue = false
+export const useInfoMapRadio = () => {
+  const [isShelterSwitchOn, setIsShelterSwitchOn] = useState(false);
+  const [isColonySwitchOn, setIsColonySwitchOn] = useState(false);
 
-export const useInfoMapRadio = ({initState}) => {
+  const toggleShelterSwtich = () =>
+    setIsShelterSwitchOn(() => !isShelterSwitchOn);
 
-  const [enable, setEnable] = useState(initState || initialValue)
- 
-  const toggleState = ()=>{
-    setEnable((state)=>!state)
-  }
+  const toggleColonySwitch = () => setIsColonySwitchOn(!isColonySwitchOn);
 
-  return {enable, toggleState}
-}
+  return {
+    toggleColonySwitch,
+    toggleShelterSwtich,
+    isColonySwitchOn,
+    isShelterSwitchOn,
+  };
+};

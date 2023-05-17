@@ -3,7 +3,7 @@ export const colonies = {
   features: [
     {
       type: "Feature",
-      properties: { stroke: "#2a77a7", "fill":"#9218",  "stroke-width": 2, "stroke-opacity": 1 },
+      properties: { stroke: "#92d9dc", "fill":"#9218",  "stroke-width": 2, "stroke-opacity": 1 },
       geometry: {
         coordinates: [
           [-109.94599432540328, 22.94599452445337],
